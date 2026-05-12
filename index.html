@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Today at Apple · 中街大悦城</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap');
+
+:root {
+  --bg: #000;
+  --card: #111;
+  --border: rgba(255,255,255,0.08);
+  --accent: #3478f6;
+  --green: #30d158;
+  --text: #f5f5f7;
+  --muted: #6e6e73;
+  --text2: #aeaeb2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif SC', -apple-system, serif;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: max(env(safe-area-inset-top), 16px) 20px 16px;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-left {}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.apple-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.logo-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text2);
+  text-transform: uppercase;
+}
+
+.store-text {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.date-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  letter-spacing: 0.04em;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.date-pill span {
+  display: block;
+  color: var(--accent);
+}
+
+/* Main */
+.main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 16px max(env(safe-area-inset-bottom), 40px);
+}
+
+/* Status */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--muted);
+}
+.status-dot.loading {
+  background: var(--accent);
+  animation: pulse 1s infinite;
+}
+.status-dot.ok { background: var(--green); }
+.status-dot.err { background: #ff453a; }
+
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.4;transform:scale(0.7)}
+}
+
+/* Session cards */
+.sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.session-card {
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.session-card:active { background: #1a1a1a; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.session-card:nth-child(1){animation-delay:.05s}
+.session-card:nth-child(2){animation-delay:.10s}
+.session-card:nth-child(3){animation-delay:.15s}
+.session-card:nth-child(4){animation-delay:.20s}
+.session-card:nth-child(5){animation-delay:.25s}
+.session-card:nth-child(6){animation-delay:.30s}
+.session-card:nth-child(7){animation-delay:.35s}
+.session-card:nth-child(8){animation-delay:.40s}
+
+/* Image */
+.session-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  background: #1a1a1a;
+}
+
+.session-img-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+/* Card body */
+.session-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.time-block {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.time-start {
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.time-end {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.session-info {
+  flex: 1;
+}
+
+.session-title {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.tag-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 9px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  background: rgba(52,120,246,0.12);
+  color: var(--accent);
+  border: 1px solid rgba(52,120,246,0.2);
+}
+
+.tag.now {
+  background: rgba(48,209,88,0.12);
+  color: var(--green);
+  border-color: rgba(48,209,88,0.25);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100%{opacity:1}50%{opacity:0.6}
+}
+
+/* Skeleton */
+.skeleton-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.skel-card {
+  background: var(--card);
+}
+
+.skel-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skel-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skel-line {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #252525 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer { to{background-position:-200% 0} }
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+.empty p { font-size: 14px; line-height: 1.7; }
+.empty a { color: var(--accent); text-decoration: none; }
+
+/* Footer */
+.footer {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.footer-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.15s;
+}
+.btn:active { opacity: 0.6; }
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo-row">
+        <span class="apple-icon">🍎</span>
+        <span class="logo-text">Today at Apple</span>
+      </div>
+      <div class="store-text">中街大悦城</div>
+    </div>
+    <div class="date-pill" id="datePill">
+      <span id="dateDay">--</span>
+      <span id="dateWeek">---</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="status-bar">
+    <div class="status-dot loading" id="statusDot"></div>
+    <span id="statusText">正在获取今日课程</span>
+  </div>
+
+  <div id="content">
+    <div class="skeleton-wrap">
+      ${[1,2,3].map(() => `
+      <div class="skel-card">
+        <div class="skel-img"></div>
+        <div class="skel-body">
+          <div class="skel-line" style="height:11px;width:30%"></div>
+          <div class="skel-line" style="height:16px;width:75%"></div>
+          <div class="skel-line" style="height:16px;width:55%"></div>
+          <div class="skel-line" style="height:20px;width:50px;border-radius:100px;margin-top:4px"></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-note">
+      APPLE 中街大悦城<br>
+      沈阳 · 大东区
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="load()">↺ 刷新</button>
+      <a class="btn btn-primary" href="https://www.apple.com.cn/today/calendar/zhongjiejoycity/" target="_blank">官网 ↗</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['日','一','二','三','四','五','六'];
+
+// 课程对应图片（Apple官方课程图片）
+const IMAGE_MAP = {
+  'iphone':   'https://www.apple.com.cn/today/media/overview/image/iphone__dfk0dxjrxaye_medium.jpg',
+  'ipad':     'https://www.apple.com.cn/today/media/overview/image/ipad__dfk0dxjrxaye_medium.jpg',
+  'mac':      'https://www.apple.com.cn/today/media/overview/image/mac__dfk0dxjrxaye_medium.jpg',
+  'pencil':   'https://www.apple.com.cn/today/media/overview/image/pencil__dfk0dxjrxaye_medium.jpg',
+  'photo':    'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&q=80',
+  'video':    'https://images.unsplash.com/photo-1536240478700-b869ad10e128?w=800&q=80',
+  'music':    'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80',
+  'draw':     'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80',
+  'kids':     'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80',
+  'default':  'https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800&q=80',
+};
+
+function getImage(title) {
+  const t = title.toLowerCase();
+  if (/iphone|手机/.test(t)) return IMAGE_MAP.iphone;
+  if (/ipad/.test(t)) return IMAGE_MAP.ipad;
+  if (/mac/.test(t)) return IMAGE_MAP.mac;
+  if (/pencil|绘画|插画|漫画|素描/.test(t)) return IMAGE_MAP.draw;
+  if (/摄影|拍摄|光影|相机|取景|构图|人像/.test(t)) return IMAGE_MAP.photo;
+  if (/视频|video|电影/.test(t)) return IMAGE_MAP.video;
+  if (/音乐|music|garageband/.test(t)) return IMAGE_MAP.music;
+  if (/儿童|亲子|kids/.test(t)) return IMAGE_MAP.kids;
+  return IMAGE_MAP.default;
+}
+
+function getTag(title) {
+  const t = title.toLowerCase();
+  if (/儿童|亲子/.test(t)) return '亲子';
+  if (/摄影|拍摄|光影|相机|构图/.test(t)) return '摄影';
+  if (/绘画|pencil|插画|漫画/.test(t)) return '创作';
+  if (/音乐/.test(t)) return '音乐';
+  if (/视频/.test(t)) return '视频';
+  if (/入门/.test(t)) return '入门';
+  if (/工作坊/.test(t)) return '工作坊';
+  return '课程';
+}
+
+function isNow(start, end) {
+  const now = new Date();
+  const [sh,sm] = start.split(':').map(Number);
+  const [eh,em] = end.split(':').map(Number);
+  const s = new Date(now); s.setHours(sh,sm,0,0);
+  const e = new Date(now); e.setHours(eh,em,0,0);
+  return now >= s && now <= e;
+}
+
+function setStatus(text, type) {
+  document.getElementById('statusText').textContent = text;
+  document.getElementById('statusDot').className = 'status-dot ' + type;
+}
+
+function initDate() {
+  const now = new Date();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('dateDay').textContent =
+    `${now.getDate()} ${months[now.getMonth()]}`;
+  document.getElementById('dateWeek').textContent = `周${DAYS[now.getDay()]}`;
+  return now;
+}
+
+function renderSessions(sessions, now) {
+  const content = document.getElementById('content');
+
+  if (!sessions.length) {
+    content.innerHTML = `
+      <div class="empty">
+        <span class="empty-icon">🍎</span>
+        <p>今日暂无课程安排<br><br>
+        <a href="https://www.apple.com.cn/today/calendar/zhongjiejoycity/" target="_blank">前往官网查看完整日历 →</a></p>
+      </div>`;
+    return;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'sessions';
+
+  sessions.forEach(s => {
+    const nowPlaying = isNow(s.start, s.end);
+    const img = getImage(s.title);
+    const tag = getTag(s.title);
+
+    const card = document.createElement('a');
+    card.className = 'session-card';
+    card.href = s.url || 'https://www.apple.com.cn/today/calendar/zhongjiejoycity/';
+    card.target = '_blank';
+
+    card.innerHTML = `
+      <img class="session-img" src="${img}" alt="${s.title}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="session-img-placeholder" style="display:none">📸</div>
+      <div class="session-body">
+        <div class="time-block">
+          <div class="time-start">${s.start}</div>
+          <div class="time-end">${s.end}</div>
+        </div>
+        <div class="session-info">
+          <div class="session-title">${s.title}</div>
+          <div class="tag-row">
+            <span class="tag">${tag}</span>
+            ${nowPlaying ? '<span class="tag now">● 进行中</span>' : ''}
+          </div>
+        </div>
+      </div>`;
+
+    wrap.appendChild(card);
+  });
+
+  content.innerHTML = '';
+  content.appendChild(wrap);
+}
+
+async function load() {
+  const now = initDate();
+  setStatus('正在获取今日课程', 'loading');
+
+  // Show skeleton
+  document.getElementById('content').innerHTML = `
+    <div class="skeleton-wrap">
+      ${[1,2,3].map(() => `
+      <div class="skel-card">
+        <div class="skel-img"></div>
+        <div class="skel-body">
+          <div class="skel-line" style="height:11px;width:30%"></div>
+          <div class="skel-line" style="height:16px;width:75%"></div>
+          <div class="skel-line" style="height:20px;width:50px;border-radius:100px;margin-top:4px"></div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: `请搜索今天（${y}-${m}-${d}）Apple 中街大悦城 Today at Apple 课程安排，网址是 https://www.apple.com.cn/today/zhongjiejoycity/
+
+只返回JSON，不要其他任何文字：
+{"sessions":[{"title":"课程名","start":"HH:MM","end":"HH:MM","url":"课程链接"}]}`
+        }]
+      })
+    });
+
+    const data = await res.json();
+    let text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('no json');
+
+    const parsed = JSON.parse(match[0]);
+    const sessions = (parsed.sessions || []).sort((a,b) => a.start.localeCompare(b.start));
+
+    renderSessions(sessions, now);
+    setStatus(
+      sessions.length ? `${sessions.length} 节课程 · ${y}/${m}/${d}` : '今日暂无课程',
+      sessions.length ? 'ok' : 'err'
+    );
+  } catch(e) {
+    setStatus('加载失败，点刷新重试', 'err');
+    document.getElementById('content').innerHTML = `
+      <div class="empty">
+        <span class="empty-icon">📡</span>
+        <p>网络请求失败<br><br>
+        <a href="https://www.apple.com.cn/today/calendar/zhongjiejoycity/" target="_blank">前往官网查看 →</a></p>
+      </div>`;
+  }
+}
+
+load();
+</script>
+</body>
+</html>
